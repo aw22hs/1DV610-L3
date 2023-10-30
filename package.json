@@ -1,0 +1,25 @@
+{
+  "name": "1dv610-l3",
+  "version": "1.0.0",
+  "description": "1DV610 - Laboration 3 - The text analyzer",
+  "type": "module",
+  "browser": "src/js/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "npx eslint ./src || exit 0",
+    "lint:fix": "npx eslint ./src --fix || exit 0"
+  },
+  "contributors": [
+    "Anja Willsund <aw22hs@student.lnu.se"
+  ],
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@lnu/eslint-config": "^1.1.10",
+    "eslint": "^8.52.0",
+    "eslint-plugin-import": "^2.29.0",
+    "vite": "^4.5.0"
+  }
+}
