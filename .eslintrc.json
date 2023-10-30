@@ -1,3 +1,4 @@
 {
-    "extends": "@lnu"
+    "extends": "@lnu",
+    "eslint-plugin-jsdoc": "off"
 }
