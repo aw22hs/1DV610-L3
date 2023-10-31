@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 
+// TODO: Importera createAnalyzers från 1DV610-L2 på GitHub
+
 import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 
 const template = document.createElement('template')
@@ -14,32 +16,27 @@ template.innerHTML = `
   </style>
 
   <form id="word-input-form">
-    <label>Count specific word:</label>
+    <label>Count specific word (regardless of formatting):</label>
     <input type="text" id="input-field" placeholder="Your word here">
     <input type="submit" value="Count" id="submit-button">
   </form>
   <div id=word-count></div>
 `
 customElements.define('my-specific-word-counter',
-  /**
-   * Represents a web-component-template element.
-   */
   class extends HTMLElement {
     #inputField
     #wordCounter
-    #wordInputForm
+    #wordCount
   
-    /**
-     * Creates an instance of the current type.
-     */
     constructor () {
       super()
 
       this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true))
 
-      this.#wordInputForm = this.shadowRoot.querySelector('#word-input-form')
       this.#inputField = this.shadowRoot.querySelector('#input-field')
-      this.#wordInputForm.addEventListener('submit', event => {
+      this.#wordCount = this.shadowRoot.querySelector('#word-count')
+
+      this.shadowRoot.querySelector('#word-input-form').addEventListener('submit', event => {
         this.#countWord(event, this.#inputField.value)
       })
     }
@@ -49,7 +46,8 @@ customElements.define('my-specific-word-counter',
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      if (name === 'text' && oldValue !== newValue) {
+      if (name === 'text' && oldValue !== newValue && newValue !== '') {
+        this.setAttribute('text', '')
         this.#getWordCounter(newValue)
       }
     }
@@ -62,16 +60,36 @@ customElements.define('my-specific-word-counter',
     #countWord(event, word) {
       event.preventDefault()
       this.#inputField.value = ''
+      try {
       const wordCount = this.#wordCounter.getSpecificWordCount(word)
-      this.#addVisibleWordCount(word, wordCount)
+      this.#showMessage(`Number of times "${word}" appears: ${wordCount}`)
+      } catch (error) {
+        const errorMessage = this.#getErrorMessage(error)
+        this.#showMessage(errorMessage)
+      }
     }
 
-    #addVisibleWordCount(word, wordCount) {
-      if (this.shadowRoot.querySelector('#word-count').firstChild) {
-        this.shadowRoot.querySelector('#word-count').firstChild.remove()
+    #getErrorMessage(error) {
+      if (error.message === 'The submitted word is empty.') {
+        return 'Invalid input. The submitted word is empty.'
+      } else if (error.message === 'The submitted word does not have the right format.') {
+        return 'Invalid input. The submitted word does not have the right format.'
+      } else {
+        return 'Something went wrong. Please try again.'
       }
-      const textNode = document.createTextNode(`Number of times "${word}" appears: ${wordCount}`)
-      this.shadowRoot.querySelector('#word-count').appendChild(textNode)
+    }
+
+    #showMessage(text) {
+      this.#removePotentialFirstChildFromWordCountDiv()
+      const paragraph = document.createElement('p')
+      paragraph.textContent = text
+      this.#wordCount.appendChild(paragraph)
+    }
+
+    #removePotentialFirstChildFromWordCountDiv() {
+      if (this.#wordCount.firstChild) {
+        this.#wordCount.firstChild.remove()
+      }
     }
   }
 )
