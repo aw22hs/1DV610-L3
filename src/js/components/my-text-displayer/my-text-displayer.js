@@ -13,8 +13,7 @@ template.innerHTML = `
       white-space: pre-wrap;
     }
     .text-box {
-      padding-top: 1px;
-      font-size: 0.8em;
+      font-size: 1em;
       height: 400px;
       width: 90%;
       vertical-align: top;
@@ -45,8 +44,11 @@ customElements.define('my-text-displayer',
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      if (name === 'text' && oldValue !== newValue) {
-        this.shadowRoot.querySelector('#text-displayer').textContent = newValue
+      if (name === 'text' && oldValue !== newValue && newValue !== '') {
+        this.setAttribute('text', '')
+        const paragraph = document.createElement('p')
+        paragraph.textContent = newValue
+        this.shadowRoot.querySelector('#text-displayer').appendChild(paragraph)
       }
     }
   }
