@@ -9,6 +9,7 @@
 
 import '../my-text-form/'
 import '../my-text-displayer/'
+import '../my-data-displayer/'
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -56,8 +57,16 @@ customElements.define('my-text-analyzer',
       textDisplayerElement.addEventListener('resetText', event => {
         this.#text = ''
         this.shadowRoot.querySelector('my-text-displayer').remove()
+        this.shadowRoot.querySelector('my-data-displayer').remove()
         this.#addTextFormElementWithEventListener()
       })
+      this.#addDataDisplayerElement()
+    }
+
+    #addDataDisplayerElement() {
+      const dataDisplayerElement = document.createElement('my-data-displayer')
+      dataDisplayerElement.setAttribute('text', this.#text)
+      this.shadowRoot.append(dataDisplayerElement)
     }
   }
 )
