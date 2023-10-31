@@ -24,6 +24,7 @@ template.innerHTML = `
 
   <div class="text-box" id=text-displayer>
   </div>
+  <button id=reset-button>Reset</button>
 `
 
 customElements.define('my-text-displayer',
@@ -33,6 +34,10 @@ customElements.define('my-text-displayer',
 
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
+      
+      this.shadowRoot.querySelector('#reset-button').addEventListener('click', event => {
+        this.dispatchEvent(new CustomEvent('resetText', { bubbles: true }))
+      })
     }
 
     static get observedAttributes() {
