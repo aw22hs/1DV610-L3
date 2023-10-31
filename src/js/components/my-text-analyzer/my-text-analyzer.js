@@ -5,38 +5,54 @@
  * @version 1.0.0
  */
 
+// TODO: Kolla inputen, lägg in spärrar
+
+import '../my-text-form/'
+import '../my-text-displayer/'
+
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
-    #cover {
-      background-size:cover;
-      background-image: url(../js/components/my-pwd/images/first_background.jpg);
-      position:fixed;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      top: 0;
-      z-index: 0;
+    h1 {
+      font-size: 2em;
+      font-family: sans-serif;
+      color: white;
+      margin-bottom: 0;
+      margin-left: 0.5em;
     }
   </style>
 
-  <div id="cover">
-    <p>Hejsan</p>
-  </div>
+  <h1>My Text Analyzer</h1>
 `
 
 customElements.define('my-text-analyzer',
-  /**
-   * Represents a my-pwd element.
-   */
   class extends HTMLElement {
-    /**
-     * Creates an instance of the current type.
-     */
-    constructor () {
+    #text
+
+    constructor() {
       super()
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
+    }
+
+    connectedCallback() {
+      this.#addTextFormElementWithEventListener()
+    }
+
+    #addTextFormElementWithEventListener() {
+      const textFormElement = document.createElement('my-text-form')
+      this.shadowRoot.append(textFormElement)
+      textFormElement.addEventListener('submitText', event => {
+        this.#text = event.detail.text
+        this.shadowRoot.querySelector('my-text-form').remove()
+        this.#addTextDisplayerElement()
+      })
+    }
+
+    #addTextDisplayerElement() {
+      const textDisplayerElement = document.createElement('my-text-displayer')
+      textDisplayerElement.setAttribute('text', this.#text)
+      this.shadowRoot.append(textDisplayerElement)
     }
   }
 )
