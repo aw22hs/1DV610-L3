@@ -21,14 +21,11 @@ template.innerHTML = `
     #submit-button {
       font-size: 0.8em;
     }
-    form label {
+    form label, form textarea, form input {
       float: left;
       clear: both;
     }
-    form input {
-      float: left;
-      clear: both;
-    }
+
   </style>
 
   <form id="text-input-form">
