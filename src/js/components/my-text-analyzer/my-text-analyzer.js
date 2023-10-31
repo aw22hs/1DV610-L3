@@ -59,6 +59,7 @@ customElements.define('my-text-analyzer',
         this.#text = ''
         this.shadowRoot.querySelector('my-text-displayer').remove()
         this.shadowRoot.querySelector('my-data-displayer').remove()
+        this.shadowRoot.querySelector('my-specific-word-counter').remove()
         this.#addTextFormElementWithEventListener()
       })
       this.#addDataDisplayerElement()
