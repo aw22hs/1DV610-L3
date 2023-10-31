@@ -10,6 +10,7 @@
 import '../my-text-form/'
 import '../my-text-displayer/'
 import '../my-data-displayer/'
+import '../my-specific-word-counter/'
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -61,12 +62,19 @@ customElements.define('my-text-analyzer',
         this.#addTextFormElementWithEventListener()
       })
       this.#addDataDisplayerElement()
+      this.#addSpecificWordCounterElement()
     }
 
     #addDataDisplayerElement() {
       const dataDisplayerElement = document.createElement('my-data-displayer')
       dataDisplayerElement.setAttribute('text', this.#text)
       this.shadowRoot.append(dataDisplayerElement)
+    }
+
+    #addSpecificWordCounterElement() {
+      const specificWordCounterElement = document.createElement('my-specific-word-counter')
+      specificWordCounterElement.setAttribute('text', this.#text)
+      this.shadowRoot.append(specificWordCounterElement)
     }
   }
 )
