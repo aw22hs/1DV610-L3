@@ -45,14 +45,19 @@ customElements.define('my-text-analyzer',
       textFormElement.addEventListener('submitText', event => {
         this.#text = event.detail.text
         this.shadowRoot.querySelector('my-text-form').remove()
-        this.#addTextDisplayerElement()
+        this.#addTextDisplayerElementWithEventListener()
       })
     }
 
-    #addTextDisplayerElement() {
+    #addTextDisplayerElementWithEventListener() {
       const textDisplayerElement = document.createElement('my-text-displayer')
       textDisplayerElement.setAttribute('text', this.#text)
       this.shadowRoot.append(textDisplayerElement)
+      textDisplayerElement.addEventListener('resetText', event => {
+        this.#text = ''
+        this.shadowRoot.querySelector('my-text-displayer').remove()
+        this.#addTextFormElementWithEventListener()
+      })
     }
   }
 )
