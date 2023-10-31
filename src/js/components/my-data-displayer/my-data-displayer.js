@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 
+// TODO: Importera createAnalyzers från 1DV610-L2 på GitHub
+
 import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 
 const template = document.createElement('template')
@@ -13,44 +15,16 @@ template.innerHTML = `
     
   </style>
 
-  <div>
-    <p id=paragraph-count></p>
-  </div>
-  <div>
-    <p id=sentence-count></p>
-  </div>
-  <div>
-    <p id=word-count></p>
-  </div>
-  <div>
-    <p id=character-count></p>
-  </div>
-  <div>
-    <p id=line-count></p>
-  </div>
-  <div>
-    <p id=non-empty-line-count></p>
-  </div>
-  <div>
-    <p id=words-per-sentence></p>
-  <div>
-  <div>
-    <p id=sentences-per-paragrah></p>
+  <div id=display-data>
   </div>
 `
 customElements.define('my-data-displayer',
-  /**
-   * Represents a web-component-template element.
-   */
   class extends HTMLElement {
     #lineCounter
     #sentenceCounter
     #textAnalyzer
     #wordCounter
 
-    /**
-     * Creates an instance of the current type.
-     */
     constructor () {
       super()
 
@@ -62,8 +36,11 @@ customElements.define('my-data-displayer',
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      if (name === 'text' && oldValue !== newValue) {
+      if (name === 'text' && oldValue !== newValue && newValue !== '') {
+        this.setAttribute('text', '')
         this.#getAnalyzers(newValue)
+        this.#removeOldData()
+        this.#displayData()
       }
     }
 
@@ -73,18 +50,33 @@ customElements.define('my-data-displayer',
       this.#sentenceCounter = analyzers.sentenceCounter
       this.#lineCounter = analyzers.lineCounter
       this.#wordCounter = analyzers.wordCounter
-      this.#displayData()
+    }
+
+    #removeOldData() {
+      const paragraphs = this.shadowRoot.querySelectorAll('p')
+      paragraphs.forEach(paragraph => {
+        paragraph.remove()
+      })
     }
 
     #displayData() {
-      this.shadowRoot.querySelector('#paragraph-count').textContent = `Number of paragraphs: ${this.#textAnalyzer.getParagraphsCount()}`
-      this.shadowRoot.querySelector('#sentence-count').textContent = `Number of sentences: ${this.#sentenceCounter.getSentenceCount()}`
-      this.shadowRoot.querySelector('#word-count').textContent = `Number of words: ${this.#wordCounter.getAllWordsCount()}`
-      this.shadowRoot.querySelector('#character-count').textContent = `Number of characters: ${this.#textAnalyzer.getCharacterCount()}`
-      this.shadowRoot.querySelector('#line-count').textContent = `Number of lines: ${this.#lineCounter.getAllLinesCount()}`
-      this.shadowRoot.querySelector('#non-empty-line-count').textContent = `Number of lines with text (not empty lines): ${this.#lineCounter.getNonEmptyLinesCount()}`
-      this.shadowRoot.querySelector('#words-per-sentence').textContent = `Average number of words per sentence: ${this.#textAnalyzer.getAverageNumberOfWordsPerSentence()}`
-      this.shadowRoot.querySelector('#sentences-per-paragrah').textContent = `Average number of sentences per paragraph: ${this.#textAnalyzer.getAverageNumberOfSentencesPerParagraph()}`      
+      this.#addParagraph(`Number of paragraphs: ${this.#textAnalyzer.getParagraphsCount()}`)
+      this.#addParagraph(`Number of sentences: ${this.#sentenceCounter.getSentenceCount()}`)
+      this.#addParagraph(`Number of words: ${this.#wordCounter.getAllWordsCount()}`)
+      this.#addParagraph(`Number of characters: ${this.#textAnalyzer.getCharacterCount()}`)
+      this.#addParagraph(`Number of lines: ${this.#lineCounter.getAllLinesCount()}`)
+      this.#addParagraph(`Number of lines with text (not empty lines): ` +
+        `${this.#lineCounter.getNonEmptyLinesCount()}`)
+      this.#addParagraph(`Average number of words per sentence: ` +
+        `${this.#textAnalyzer.getAverageNumberOfWordsPerSentence()}`)
+      this.#addParagraph(`Average number of sentences per paragraph: ` +
+        `${this.#textAnalyzer.getAverageNumberOfSentencesPerParagraph()}`)     
+    }
+
+    #addParagraph(text) {
+      const paragraph = document.createElement('p')
+      paragraph.textContent = text
+      this.shadowRoot.querySelector('#display-data').appendChild(paragraph)
     }
   }
 )
