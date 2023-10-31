@@ -31,7 +31,6 @@ template.innerHTML = `
 customElements.define('my-text-analyzer',
   class extends HTMLElement {
     #text
-    #updatedText
 
     constructor() {
       super()
@@ -54,44 +53,34 @@ customElements.define('my-text-analyzer',
     }
 
     #addTextDisplayerElementWithEventListener() {
-      const textDisplayerElement = document.createElement('my-text-displayer')
-      textDisplayerElement.setAttribute('text', this.#text)
-      this.shadowRoot.append(textDisplayerElement)
-      textDisplayerElement.addEventListener('resetText', event => {
+      this.#addNewElement('my-text-displayer')
+      this.shadowRoot.querySelector('my-text-displayer').addEventListener('resetText', event => {
         this.#text = ''
         this.#removeElements()
         this.#addTextFormElementWithEventListener()
       })
-      this.#addDataDisplayerElement()
-      this.#addSpecificWordCounterElement()
+      this.#addNewElement('my-data-displayer')
+      this.#addNewElement('my-specific-word-counter')
       this.#addMyTextUpdaterElementWithEventListener()
     }
 
-    #addDataDisplayerElement() {
-      const dataDisplayerElement = document.createElement('my-data-displayer')
-      dataDisplayerElement.setAttribute('text', this.#text)
-      this.shadowRoot.append(dataDisplayerElement)
-    }
-
-    #addSpecificWordCounterElement() {
-      const specificWordCounterElement = document.createElement('my-specific-word-counter')
-      specificWordCounterElement.setAttribute('text', this.#text)
-      this.shadowRoot.append(specificWordCounterElement)
+    #addNewElement(elementType) {
+      const newElement = document.createElement(elementType)
+      newElement.setAttribute('text', this.#text)
+      this.shadowRoot.append(newElement)
     }
 
     #addMyTextUpdaterElementWithEventListener() {
-      const textUpdaterElement = document.createElement('my-text-updater')
-      textUpdaterElement.setAttribute('text', this.#text)
-      this.shadowRoot.append(textUpdaterElement)
-      textUpdaterElement.addEventListener('updateText', event => {
-        this.#updatedText = event.detail.text
+      this.#addNewElement('my-text-updater')
+      this.shadowRoot.querySelector('my-text-updater').addEventListener('updateText', event => {
+        this.#text = event.detail.text
         this.#updateText()
       })
     }
 
     #updateText() {
-      this.shadowRoot.querySelector('my-text-displayer').setAttribute('text', this.#updatedText)
-      this.shadowRoot.querySelector('my-data-displayer').setAttribute('text', this.#updatedText)
+      this.shadowRoot.querySelector('my-text-displayer').setAttribute('text', this.#text)
+      this.shadowRoot.querySelector('my-data-displayer').setAttribute('text', this.#text)
     }
 
     #removeElements() {
