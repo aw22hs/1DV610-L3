@@ -11,6 +11,7 @@ import '../my-text-form/'
 import '../my-text-displayer/'
 import '../my-data-displayer/'
 import '../my-specific-word-counter/'
+import '../my-text-updater/'
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -30,6 +31,7 @@ template.innerHTML = `
 customElements.define('my-text-analyzer',
   class extends HTMLElement {
     #text
+    #updatedText
 
     constructor() {
       super()
@@ -57,13 +59,12 @@ customElements.define('my-text-analyzer',
       this.shadowRoot.append(textDisplayerElement)
       textDisplayerElement.addEventListener('resetText', event => {
         this.#text = ''
-        this.shadowRoot.querySelector('my-text-displayer').remove()
-        this.shadowRoot.querySelector('my-data-displayer').remove()
-        this.shadowRoot.querySelector('my-specific-word-counter').remove()
+        this.#removeElements()
         this.#addTextFormElementWithEventListener()
       })
       this.#addDataDisplayerElement()
       this.#addSpecificWordCounterElement()
+      this.#addMyTextUpdaterElementWithEventListener()
     }
 
     #addDataDisplayerElement() {
@@ -76,6 +77,28 @@ customElements.define('my-text-analyzer',
       const specificWordCounterElement = document.createElement('my-specific-word-counter')
       specificWordCounterElement.setAttribute('text', this.#text)
       this.shadowRoot.append(specificWordCounterElement)
+    }
+
+    #addMyTextUpdaterElementWithEventListener() {
+      const textUpdaterElement = document.createElement('my-text-updater')
+      textUpdaterElement.setAttribute('text', this.#text)
+      this.shadowRoot.append(textUpdaterElement)
+      textUpdaterElement.addEventListener('updateText', event => {
+        this.#updatedText = event.detail.text
+        this.#updateText()
+      })
+    }
+
+    #updateText() {
+      this.shadowRoot.querySelector('my-text-displayer').setAttribute('text', this.#updatedText)
+      this.shadowRoot.querySelector('my-data-displayer').setAttribute('text', this.#updatedText)
+    }
+
+    #removeElements() {
+      this.shadowRoot.querySelector('my-text-displayer').remove()
+      this.shadowRoot.querySelector('my-data-displayer').remove()
+      this.shadowRoot.querySelector('my-specific-word-counter').remove()
+      this.shadowRoot.querySelector('my-text-updater').remove()
     }
   }
 )
