@@ -1,5 +1,5 @@
 /**
- * The text-form web component module.
+ * The my-text-form web component module.
  *
  * @author Anja Willsund <aw22hs@student.lnu.se>
  * @version 1.0.0
@@ -11,25 +11,37 @@ template.innerHTML = `
     form {
       padding: 1em;
     }
-    #text-input-field {
+    .text-box {
+      padding-top: 1px;
       font-size: 0.8em;
+      height: 400px;
+      width: 90%;
+      vertical-align: top;
     }
     #submit-button {
       font-size: 0.8em;
+    }
+    form label {
+      float: left;
+      clear: both;
+    }
+    form input {
+      float: left;
+      clear: both;
     }
   </style>
 
   <form id="text-input-form">
     <label>Submit text to analyze</label>
-    <input type="text" id="text-input-field" placeholder="Your text goes here">
-    <input type="submit" value="Submit" id="submit-button">
+    <textarea class="text-box" placeholder="Your text goes here"></textarea>
+    <input type="button" value="Submit" id="submit-button">
   </form>
 `
 
-customElements.define('text-form',
+customElements.define('my-text-form',
   class extends HTMLElement {
+    #submitButton
     #textInputField
-    #textInputForm
 
     constructor () {
       super()
@@ -37,10 +49,10 @@ customElements.define('text-form',
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
 
-      this.#textInputField = this.shadowRoot.querySelector('#text-input-field')
-      this.#textInputForm = this.shadowRoot.querySelector('#text-input-form')
+      this.#textInputField = this.shadowRoot.querySelector('.text-box')
+      this.#submitButton = this.shadowRoot.querySelector('#submit-button')
 
-      this.#textInputForm.addEventListener('submit', event =>
+      this.#submitButton.addEventListener('click', event =>
         this.#addText(event, this.#textInputField.value))
     }
 
