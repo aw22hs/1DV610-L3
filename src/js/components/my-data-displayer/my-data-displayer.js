@@ -14,28 +14,28 @@ template.innerHTML = `
   </style>
 
   <div>
-    <p id=paragraph-count>Number of paragraphs: </p>
+    <p id=paragraph-count></p>
   </div>
   <div>
-    <p id=sentence-count>Number of sentences: </p>
+    <p id=sentence-count></p>
   </div>
   <div>
-    <p id=word-count>Number of words: </p>
+    <p id=word-count></p>
   </div>
   <div>
-    <p id=character-count>Number of characters: </p>
+    <p id=character-count></p>
   </div>
   <div>
-    <p id=line-count>Number of lines: </p>
+    <p id=line-count></p>
   </div>
   <div>
-    <p id=non-empty-line-count>Number of lines with text (not empty lines): </p>
+    <p id=non-empty-line-count></p>
   </div>
   <div>
-    <p id=words-per-sentence>Average number of words per sentence: </p>
+    <p id=words-per-sentence></p>
   <div>
   <div>
-    <p id=sentences-per-paragrah>Average number of sentences per paragraph: </p>
+    <p id=sentences-per-paragrah></p>
   </div>
 `
 customElements.define('my-data-displayer',
@@ -46,7 +46,6 @@ customElements.define('my-data-displayer',
     #lineCounter
     #sentenceCounter
     #textAnalyzer
-    #updatedTextAnalyzer
     #wordCounter
 
     /**
@@ -72,21 +71,20 @@ customElements.define('my-data-displayer',
       const analyzers = createAnalyzers(text)
       this.#textAnalyzer = analyzers.textAnalyzer
       this.#sentenceCounter = analyzers.sentenceCounter
-      this.#updatedTextAnalyzer = analyzers.updatedTextAnalyzer
       this.#lineCounter = analyzers.lineCounter
       this.#wordCounter = analyzers.wordCounter
       this.#displayData()
     }
 
     #displayData() {
-      this.shadowRoot.querySelector('#paragraph-count').textContent += this.#textAnalyzer.getParagraphsCount()
-      this.shadowRoot.querySelector('#sentence-count').textContent += this.#sentenceCounter.getSentenceCount()
-      this.shadowRoot.querySelector('#word-count').textContent += this.#wordCounter.getAllWordsCount()
-      this.shadowRoot.querySelector('#character-count').textContent += this.#textAnalyzer.getCharacterCount()
-      this.shadowRoot.querySelector('#line-count').textContent += this.#lineCounter.getAllLinesCount()
-      this.shadowRoot.querySelector('#non-empty-line-count').textContent += this.#lineCounter.getNonEmptyLinesCount()
-      this.shadowRoot.querySelector('#words-per-sentence').textContent += this.#textAnalyzer.getAverageNumberOfWordsPerSentence()
-      this.shadowRoot.querySelector('#sentences-per-paragrah').textContent += this.#textAnalyzer.getAverageNumberOfSentencesPerParagraph()
+      this.shadowRoot.querySelector('#paragraph-count').textContent = `Number of paragraphs: ${this.#textAnalyzer.getParagraphsCount()}`
+      this.shadowRoot.querySelector('#sentence-count').textContent = `Number of sentences: ${this.#sentenceCounter.getSentenceCount()}`
+      this.shadowRoot.querySelector('#word-count').textContent = `Number of words: ${this.#wordCounter.getAllWordsCount()}`
+      this.shadowRoot.querySelector('#character-count').textContent = `Number of characters: ${this.#textAnalyzer.getCharacterCount()}`
+      this.shadowRoot.querySelector('#line-count').textContent = `Number of lines: ${this.#lineCounter.getAllLinesCount()}`
+      this.shadowRoot.querySelector('#non-empty-line-count').textContent = `Number of lines with text (not empty lines): ${this.#lineCounter.getNonEmptyLinesCount()}`
+      this.shadowRoot.querySelector('#words-per-sentence').textContent = `Average number of words per sentence: ${this.#textAnalyzer.getAverageNumberOfWordsPerSentence()}`
+      this.shadowRoot.querySelector('#sentences-per-paragrah').textContent = `Average number of sentences per paragraph: ${this.#textAnalyzer.getAverageNumberOfSentencesPerParagraph()}`      
     }
   }
 )
