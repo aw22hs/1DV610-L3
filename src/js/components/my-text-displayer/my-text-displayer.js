@@ -46,8 +46,7 @@ customElements.define('my-text-displayer',
 
     attributeChangedCallback(name, oldValue, newValue) {
       if (name === 'text' && oldValue !== newValue) {
-        const textDisplayer = this.shadowRoot.querySelector('#text-displayer')
-        textDisplayer.textContent = newValue
+        this.shadowRoot.querySelector('#text-displayer').textContent = newValue
       }
     }
   }
