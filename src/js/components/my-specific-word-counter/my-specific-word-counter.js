@@ -15,7 +15,7 @@ template.innerHTML = `
 
   <form id="word-input-form">
     <label>Count specific word:</label>
-    <input type="text" id="input-field" placeholder="Your word here"></textarea>
+    <input type="text" id="input-field" placeholder="Your word here">
     <input type="submit" value="Count" id="submit-button">
   </form>
   <div id=word-count></div>
