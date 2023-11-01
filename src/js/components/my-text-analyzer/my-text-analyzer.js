@@ -81,6 +81,7 @@ customElements.define('my-text-analyzer',
     #updateText() {
       this.shadowRoot.querySelector('my-text-displayer').setAttribute('text', this.#text)
       this.shadowRoot.querySelector('my-data-displayer').setAttribute('text', this.#text)
+      this.shadowRoot.querySelector('my-specific-word-counter').setAttribute('text', this.#text)
     }
 
     #removeElements() {
