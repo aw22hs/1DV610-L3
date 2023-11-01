@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 
+// TODO: Importera createAnalyzers från 1DV610-L2 på GitHub
+
 import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 
 const template = document.createElement('template')
@@ -14,7 +16,8 @@ template.innerHTML = `
   </style>
 
 <form id="update-text-form">
-    <label>Change specific word in the text:</label>
+    <label>Change specific word in the text (only replaces words that has the exact same formatting 
+        as the submitted word):</label>
     <input type="text" id="word-to-replace-input" placeholder="Word to replace">
     <input type="text" id="new-word-input" placeholder="New word">
     <input type="submit" value="Update text" id="submit-button">
@@ -22,24 +25,18 @@ template.innerHTML = `
   <div id=text-update-message></div>
 `
 customElements.define('my-text-updater',
-  /**
-   * Represents a web-component-template element.
-   */
   class extends HTMLElement {
     #textUpdateMessage
     #updatedTextAnalyzer
-    #updateTextForm
-    /**
-     * Creates an instance of the current type.
-     */
+
     constructor() {
       super()
 
       this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true))
 
-      this.#updateTextForm = this.shadowRoot.querySelector('#update-text-form')
-      this.#updateTextForm.addEventListener('submit', event => {
-        this.#updateText(event, this.#updateTextForm.querySelector('#word-to-replace-input').value, this.#updateTextForm.querySelector('#new-word-input').value)
+      this.shadowRoot.querySelector('#update-text-form').addEventListener('submit', event => {
+        event.preventDefault()
+        this.#dispatchUpdateTextEventAndShowMessage()
       })
       this.#textUpdateMessage = this.shadowRoot.querySelector('#text-update-message')
     }
@@ -49,50 +46,68 @@ customElements.define('my-text-updater',
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      if (name === 'text' && oldValue !== newValue) {
-        this.#getUpdatedTextAnalyzer(newValue)
+      if (name === 'text' && oldValue !== newValue && newValue !== '') {
+        this.#getUpdatedTextAnalyzer()
       }
     }
 
-    #getUpdatedTextAnalyzer(text) {
-      const analyzers = createAnalyzers(text)
+    #getUpdatedTextAnalyzer() {
+      const analyzers = createAnalyzers(this.getAttribute('text'))
       this.#updatedTextAnalyzer = analyzers.updatedTextAnalyzer
+      this.setAttribute('text', '')
     }
 
-    #updateText(event, wordToReplace, newWord) {
-      event.preventDefault()
+    #dispatchUpdateTextEventAndShowMessage() {
       try {
-        const updatedText = this.#updatedTextAnalyzer.replaceWordsWithExactFormatting(wordToReplace, newWord)
+        const updatedText = this.#updatedTextAnalyzer.replaceWordsWithExactFormatting(
+          this.shadowRoot.querySelector('#word-to-replace-input').value, 
+          this.shadowRoot.querySelector('#new-word-input').value)
         this.dispatchEvent(new CustomEvent('updateText', { bubbles: true, detail: { text: updatedText } }))
-        this.#displayDifferenceFromOriginalText()
+        const difference = this.#getDifferenceFromOriginalText()
+        this.#showMessage(difference)
       } catch (error) {
-        if (error.message === 'Invalid input. The submitted word is empty.') {
-          this.#textUpdateMessage.textContent = 'Invalid input. One or both submitted words are empty.'
-          return
-        } else if (error.message === 'The submitted word does not have the right format.') {
-          this.#textUpdateMessage.textContent = 'Invalid input. The submitted word does not have the right format.'
-          return
-        } else {
-          this.#textUpdateMessage.textContent = 'Something went wrong. Please try again.'
-          return
-        }
+        const errorMessage = this.#getErrorMessage(error)
+        this.#showMessage(errorMessage)
       }
     }
 
-    #displayDifferenceFromOriginalText() {
+    #getDifferenceFromOriginalText() {
       if (!this.#updatedTextAnalyzer.textHasBeenUpdated()) {
-        this.#textUpdateMessage.textContent = 'The original text and the updated text are the same.'
+        return 'The original text and the updated text are the same.'
       } else if (this.#updatedTextAnalyzer.textHasBeenUpdated()) {
         const letterDifference = this.#updatedTextAnalyzer.getLetterCountDifferenceBetweenOriginalAndUpdatedText()
         if (this.#updatedTextAnalyzer.originalTextIsLongerThanUpdatedText()) {
-          this.#textUpdateMessage.textContent = `The updated text is ${letterDifference} character(s) shorter than the original text.`
+          return `The updated text is ${letterDifference} character(s) shorter than the original text.`
         } else {
           if (letterDifference === 0) {
-            this.#textUpdateMessage.textContent = 'The original text and the updated text are the same length.'
+            return 'The original text and the updated text are the same length.'
           } else {
-            this.#textUpdateMessage.textContent = `The updated text is ${letterDifference} character(s) longer than the original text.`
+            return `The updated text is ${letterDifference} character(s) longer than the original text.`
           }
         }
+      }
+    }
+
+    #showMessage(text) {
+      this.#removeMessageIfExists()
+      const paragraph = document.createElement('p')
+      paragraph.textContent = text
+      this.#textUpdateMessage.appendChild(paragraph)
+    }
+
+    #removeMessageIfExists() {
+      if (this.#textUpdateMessage.firstChild) {
+        this.#textUpdateMessage.firstChild.remove()
+      }
+    }
+
+    #getErrorMessage(error) {
+      if (error.message === 'The submitted word is empty.') {
+        return 'Invalid input. One or both submitted words are empty.'
+      } else if (error.message === 'The submitted word does not have the right format.') {
+        return 'Invalid input. The submitted word does not have the right format.'
+      } else {
+        return 'Something went wrong. Please try again.'
       }
     }
   }
