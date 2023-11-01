@@ -44,8 +44,7 @@ customElements.define('my-data-displayer',
     }
 
     #getAnalyzers() {
-      const text = this.getAttribute('text')
-      const analyzers = createAnalyzers(text)
+      const analyzers = createAnalyzers(this.getAttribute('text'))
       this.#textAnalyzer = analyzers.textAnalyzer
       this.#sentenceCounter = analyzers.sentenceCounter
       this.#lineCounter = analyzers.lineCounter
