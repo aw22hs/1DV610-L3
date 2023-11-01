@@ -27,8 +27,8 @@ customElements.define('my-specific-word-counter',
     #inputField
     #wordCounter
     #wordCount
-  
-    constructor () {
+
+    constructor() {
       super()
 
       this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true))
@@ -37,7 +37,8 @@ customElements.define('my-specific-word-counter',
       this.#wordCount = this.shadowRoot.querySelector('#word-count')
 
       this.shadowRoot.querySelector('#word-input-form').addEventListener('submit', event => {
-        this.#countWord(event, this.#inputField.value)
+        event.preventDefault()
+        this.#displayWordCount()
       })
     }
 
@@ -47,6 +48,7 @@ customElements.define('my-specific-word-counter',
 
     attributeChangedCallback(name, oldValue, newValue) {
       if (name === 'text' && oldValue !== newValue && newValue !== '') {
+        this.#removeMessageIfExists()
         this.#getWordCounter()
       }
     }
@@ -57,15 +59,14 @@ customElements.define('my-specific-word-counter',
       this.setAttribute('text', '')
     }
 
-    #countWord(event, word) {
-      event.preventDefault()
-      this.#inputField.value = ''
+    #displayWordCount() {
       try {
-      const wordCount = this.#wordCounter.getSpecificWordCount(word)
-      this.#showMessage(`Number of times "${word}" appears: ${wordCount}`)
+        const wordCount = this.#wordCounter.getSpecificWordCount(this.#inputField.value)
+        this.#displayMessage(`Number of times "${this.#inputField.value}" appears: ${wordCount}`)
+        this.#inputField.value = ''
       } catch (error) {
         const errorMessage = this.#getErrorMessage(error)
-        this.#showMessage(errorMessage)
+        this.#displayMessage(errorMessage)
       }
     }
 
@@ -79,7 +80,7 @@ customElements.define('my-specific-word-counter',
       }
     }
 
-    #showMessage(text) {
+    #displayMessage(text) {
       this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
       paragraph.textContent = text
