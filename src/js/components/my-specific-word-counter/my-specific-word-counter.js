@@ -47,14 +47,14 @@ customElements.define('my-specific-word-counter',
 
     attributeChangedCallback(name, oldValue, newValue) {
       if (name === 'text' && oldValue !== newValue && newValue !== '') {
-        this.setAttribute('text', '')
-        this.#getWordCounter(newValue)
+        this.#getWordCounter()
       }
     }
 
-    #getWordCounter(text) {
-      const analyzers = createAnalyzers(text)
+    #getWordCounter() {
+      const analyzers = createAnalyzers(this.getAttribute('text'))
       this.#wordCounter = analyzers.wordCounter
+      this.setAttribute('text', '')
     }
 
     #countWord(event, word) {
