@@ -80,13 +80,13 @@ customElements.define('my-specific-word-counter',
     }
 
     #showMessage(text) {
-      this.#removePotentialFirstChildFromWordCountDiv()
+      this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
       paragraph.textContent = text
       this.#wordCount.appendChild(paragraph)
     }
 
-    #removePotentialFirstChildFromWordCountDiv() {
+    #removeMessageIfExists() {
       if (this.#wordCount.firstChild) {
         this.#wordCount.firstChild.remove()
       }
