@@ -37,19 +37,20 @@ customElements.define('my-data-displayer',
 
     attributeChangedCallback(name, oldValue, newValue) {
       if (name === 'text' && oldValue !== newValue && newValue !== '') {
-        this.setAttribute('text', '')
-        this.#getAnalyzers(newValue)
+        this.#getAnalyzers()
         this.#removeOldData()
         this.#displayData()
       }
     }
 
-    #getAnalyzers(text) {
+    #getAnalyzers() {
+      const text = this.getAttribute('text')
       const analyzers = createAnalyzers(text)
       this.#textAnalyzer = analyzers.textAnalyzer
       this.#sentenceCounter = analyzers.sentenceCounter
       this.#lineCounter = analyzers.lineCounter
       this.#wordCounter = analyzers.wordCounter
+      this.setAttribute('text', '')
     }
 
     #removeOldData() {
