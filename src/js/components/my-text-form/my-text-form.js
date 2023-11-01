@@ -58,24 +58,30 @@ customElements.define('my-text-form',
       this.#textInputField = this.shadowRoot.querySelector('#text-input-field')
       this.#submitTextErrorMessage = this.shadowRoot.querySelector('#submit-text-error-message')
 
-      this.shadowRoot.querySelector('#submit-button').addEventListener('click', event =>
-        this.#addText(event, this.#textInputField.value))
+      this.shadowRoot.querySelector('#submit-button').addEventListener('click', event => {
+        event.preventDefault()
+        this.#dispatchSubmitTextEvent()
+      })
     }
 
     connectedCallback () {
       this.#textInputField.focus()
     }
 
-    #addText (event, value) {
-      event.preventDefault()
+    #dispatchSubmitTextEvent() {
       try {
-        createAnalyzers(value)
+        this.#isTextInputValid()
         this.dispatchEvent(new window.CustomEvent('submitText',
-        { bubbles: true, detail: { text: value } }))
+        { bubbles: true, detail: { text: this.#textInputField.value } }))
       } catch (error) {
         const errorMessage = this.#getErrorMessage(error)
         this.#showMessage(errorMessage)
       }
+    }
+
+    #isTextInputValid() {
+      // Throws error if the text input is empty
+      createAnalyzers(this.#textInputField.value)
     }
 
     #getErrorMessage(error) {
