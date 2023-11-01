@@ -87,13 +87,13 @@ customElements.define('my-text-form',
     }
 
     #showMessage(text) {
-      this.#removePotentialFirstChildFromWordCountDiv()
+      this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
       paragraph.textContent = text
       this.#submitTextErrorMessage.appendChild(paragraph)
     }
 
-    #removePotentialFirstChildFromWordCountDiv() {
+    #removeMessageIfExists() {
       if (this.#submitTextErrorMessage.firstChild) {
         this.#submitTextErrorMessage.firstChild.remove()
       }
