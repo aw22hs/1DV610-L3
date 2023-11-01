@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 
+import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
+
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
@@ -25,19 +27,24 @@ template.innerHTML = `
       float: left;
       clear: both;
     }
+    #submit-text-error-message {
+      float: left;
+      clear: both;
+    }
 
   </style>
 
-  <form id="text-input-form">
+  <form>
     <label>Submit text to analyze</label>
-    <textarea class="text-box" placeholder="Your text goes here"></textarea>
+    <textarea class="text-box" id=text-input-field placeholder="Your text goes here"></textarea>
     <input type="button" value="Submit" id="submit-button">
   </form>
+  <div id=submit-text-error-message></div>
 `
 
 customElements.define('my-text-form',
   class extends HTMLElement {
-    #submitButton
+    #submitTextErrorMessage
     #textInputField
 
     constructor () {
@@ -46,10 +53,10 @@ customElements.define('my-text-form',
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
 
-      this.#textInputField = this.shadowRoot.querySelector('.text-box')
-      this.#submitButton = this.shadowRoot.querySelector('#submit-button')
+      this.#textInputField = this.shadowRoot.querySelector('#text-input-field')
+      this.#submitTextErrorMessage = this.shadowRoot.querySelector('#submit-text-error-message')
 
-      this.#submitButton.addEventListener('click', event =>
+      this.shadowRoot.querySelector('#submit-button').addEventListener('click', event =>
         this.#addText(event, this.#textInputField.value))
     }
 
@@ -59,11 +66,35 @@ customElements.define('my-text-form',
 
     #addText (event, value) {
       event.preventDefault()
-      this.setAttribute('text', value)
-      this.#textInputField.value = ''
+      try {
+        createAnalyzers(value)
+        this.dispatchEvent(new window.CustomEvent('submitText',
+        { bubbles: true, detail: { text: value } }))
+      } catch (error) {
+        const errorMessage = this.#getErrorMessage(error)
+        this.#showMessage(errorMessage)
+      }
+    }
 
-      this.dispatchEvent(new window.CustomEvent('submitText',
-        { bubbles: true, detail: { text: this.getAttribute('text') } }))
+    #getErrorMessage(error) {
+      if (error.message === 'There are no characters in the string.') {
+        return 'There was no text submitted. Please try again.'
+      } else {
+        return 'Something went wrong. Please try again.'
+      }
+    }
+
+    #showMessage(text) {
+      this.#removePotentialFirstChildFromWordCountDiv()
+      const paragraph = document.createElement('p')
+      paragraph.textContent = text
+      this.#submitTextErrorMessage.appendChild(paragraph)
+    }
+
+    #removePotentialFirstChildFromWordCountDiv() {
+      if (this.#submitTextErrorMessage.firstChild) {
+        this.#submitTextErrorMessage.firstChild.remove()
+      }
     }
   }
 )
