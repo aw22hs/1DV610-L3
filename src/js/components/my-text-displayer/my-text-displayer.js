@@ -28,11 +28,15 @@ template.innerHTML = `
 
 customElements.define('my-text-displayer',
   class extends HTMLElement {
+    #textDisplayer
+
     constructor() {
       super()
 
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
+
+      this.#textDisplayer = this.shadowRoot.querySelector('#text-displayer')
       
       this.shadowRoot.querySelector('#reset-button').addEventListener('click', event => {
         this.dispatchEvent(new CustomEvent('resetText', { bubbles: true }))
@@ -45,10 +49,21 @@ customElements.define('my-text-displayer',
 
     attributeChangedCallback(name, oldValue, newValue) {
       if (name === 'text' && oldValue !== newValue && newValue !== '') {
-        this.setAttribute('text', '')
-        const paragraph = document.createElement('p')
-        paragraph.textContent = newValue
-        this.shadowRoot.querySelector('#text-displayer').appendChild(paragraph)
+        this.#displayText()
+      }
+    }
+
+    #displayText() {
+      this.#removeTextIfExists()
+      const paragraph = document.createElement('p')
+      paragraph.textContent = this.getAttribute('text')
+      this.#textDisplayer.appendChild(paragraph)
+      this.setAttribute('text', '')
+    }
+
+    #removeTextIfExists() {
+      if (this.#textDisplayer.firstChild) {
+        this.#textDisplayer.firstChild.remove()
       }
     }
   }
