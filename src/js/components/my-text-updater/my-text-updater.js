@@ -103,9 +103,9 @@ customElements.define('my-text-updater',
 
     #getErrorMessage(error) {
       if (error.message === 'The submitted word is empty.') {
-        return 'Invalid input. One or both submitted words are empty.'
+        return 'One or both submitted words are empty. Please try again.'
       } else if (error.message === 'The submitted word does not have the right format.') {
-        return 'Invalid input. The submitted word does not have the right format.'
+        return 'One or both submitted words do not have the right format. Please try again.'
       } else {
         return 'Something went wrong. Please try again.'
       }
