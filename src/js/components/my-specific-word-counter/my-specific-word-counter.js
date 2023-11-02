@@ -72,9 +72,11 @@ customElements.define('my-specific-word-counter',
 
     #getErrorMessage(error) {
       if (error.message === 'The submitted word is empty.') {
-        return 'Invalid input. The submitted word is empty.'
+        return 'The submitted word is empty. Please try again.'
       } else if (error.message === 'The submitted word does not have the right format.') {
-        return 'Invalid input. The submitted word does not have the right format.'
+        return 'The submitted word does not have the right format. Please try again.'
+      } else if (error.message === 'The submitted word is too long.') {
+        return 'The submitted word is too long, maixmum 50 characters allowed. Please try again.'
       } else {
         return 'Something went wrong. Please try again.'
       }
