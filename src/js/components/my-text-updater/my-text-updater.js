@@ -26,18 +26,18 @@ template.innerHTML = `
 `
 customElements.define('my-text-updater',
   class extends HTMLElement {
-    #newWord
+    #newWordInput
     #textUpdateMessage
     #updatedTextAnalyzer
-    #wordToReplace
+    #wordToReplaceInput
 
     constructor() {
       super()
 
       this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true))
 
-      this.#wordToReplace = this.shadowRoot.querySelector('#word-to-replace-input').value
-      this.#newWord = this.shadowRoot.querySelector('#new-word-input').value
+      this.#wordToReplaceInput = this.shadowRoot.querySelector('#word-to-replace-input')
+      this.#newWordInput = this.shadowRoot.querySelector('#new-word-input')
 
       this.shadowRoot.querySelector('#update-text-form').addEventListener('submit', event => {
         event.preventDefault()
@@ -64,7 +64,7 @@ customElements.define('my-text-updater',
 
     #dispatchUpdateTextEventAndShowMessage() {
       try {
-        const updatedText = this.#updatedTextAnalyzer.replaceWordsWithExactFormatting(this.#wordToReplace, this.#newWord)
+        const updatedText = this.#updatedTextAnalyzer.replaceWordsWithExactFormatting(this.#wordToReplaceInput.value, this.#newWordInput.value)
         this.dispatchEvent(new CustomEvent('updateText', { bubbles: true, detail: { text: updatedText } }))
         const difference = this.#getDifferenceFromOriginalText()
         this.#showMessage(difference)
@@ -100,8 +100,8 @@ customElements.define('my-text-updater',
     }
 
     #resetWords() {
-      this.#wordToReplace = ''
-      this.#newWord = ''
+      this.#wordToReplaceInput.value = ''
+      this.#newWordInput.value = ''
     }
 
     #removeMessageIfExists() {
