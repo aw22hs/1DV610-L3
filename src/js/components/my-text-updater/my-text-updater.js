@@ -76,17 +76,18 @@ customElements.define('my-text-updater',
     }
 
     #getDifferenceFromOriginalText() {
+      const wordsReplaced = "The word(s) has been replaced. "
       if (!this.#updatedTextAnalyzer.textHasBeenUpdated()) {
-        return 'The original text and the updated text are the same.'
+        return wordsReplaced + 'The original text and the updated text are the same.'
       } else if (this.#updatedTextAnalyzer.textHasBeenUpdated()) {
         const letterDifference = this.#updatedTextAnalyzer.getLetterCountDifferenceBetweenOriginalAndUpdatedText()
         if (this.#updatedTextAnalyzer.originalTextIsLongerThanUpdatedText()) {
-          return `The updated text is ${letterDifference} character(s) shorter than the original text.`
+          return wordsReplaced + `The updated text is ${letterDifference} character(s) shorter than the original text.`
         } else {
           if (letterDifference === 0) {
-            return 'The original text and the updated text are the same length.'
+            return wordsReplaced + 'The original text and the updated text are the same length.'
           } else {
-            return `The updated text is ${letterDifference} character(s) longer than the original text.`
+            return wordsReplaced + `The updated text is ${letterDifference} character(s) longer than the original text.`
           }
         }
       }
@@ -115,6 +116,8 @@ customElements.define('my-text-updater',
         return 'One or both submitted words are empty. Please try again.'
       } else if (error.message === 'The submitted word does not have the right format.') {
         return 'One or both submitted words do not have the right format. Please try again.'
+      } else if (error.message === 'The submitted word is too long.') {
+        return 'One or both submitted words are too long, maximum 50 characters allowed. Please try again.'
       } else {
         return 'Something went wrong. Please try again.'
       }
