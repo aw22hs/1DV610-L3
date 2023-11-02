@@ -76,7 +76,7 @@ customElements.define('my-specific-word-counter',
       } else if (error.message === 'The submitted word does not have the right format.') {
         return 'The submitted word does not have the right format. Please try again.'
       } else if (error.message === 'The submitted word is too long.') {
-        return 'The submitted word is too long, maixmum 50 characters allowed. Please try again.'
+        return 'The submitted word is too long, maximum 50 characters allowed. Please try again.'
       } else {
         return 'Something went wrong. Please try again.'
       }
