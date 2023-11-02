@@ -87,6 +87,8 @@ customElements.define('my-text-form',
     #getErrorMessage(error) {
       if (error.message === 'There are no characters in the string.') {
         return 'There was no text submitted. Please try again.'
+      } else if (error.message === 'There are more than 10 000 characters in the string.') {
+        return 'The submitted text is too long, maximum 10 000 characters. Please try again with a shorter text.'
       } else {
         return 'Something went wrong. Please try again.'
       }
