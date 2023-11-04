@@ -13,32 +13,56 @@ const template = document.createElement('template')
 template.innerHTML = `
   <style>
     form {
-      padding: 1em;
+      width: 100%;
     }
     .text-box {
-      padding-top: 1px;
-      font-size: 0.8em;
+      border-radius: 8px;
+      padding: 0.5em;
+      font-size: 1em;
       height: 400px;
-      width: 90%;
-      vertical-align: top;
+      width: 100%;
+      font-family: 'Open sans', sans-serif;
     }
     #submit-button {
-      font-size: 0.8em;
+      float: left;
+      font-size: 1.2em;
+      height: 2.5em;
+      width: 6em;
+      border-radius: 8px;
+      background-color: rgb(34, 54, 44);
+      color: white;
+      border: none;
+      margin-top: 1em;
+      box-shadow: 0px 2px 3px #111111;
     }
-    form label, form textarea, form input {
+    #submit-button:hover {
+      background-color: rgb(47, 75, 61);
+    }
+    #submit-button:active {
+      transform: translateY(2px);
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+    form textarea, form input {
       float: left;
       clear: both;
     }
-    #submit-text-error-message {
-      float: left;
-      clear: both;
+    form p {
+      color: white;
+      font-size: 1.2em;
+      margin-top: 1.7em;
+      margin-left: 0.5em;
+      display: inline-block;
+      font-family: 'Open sans', sans-serif;
+      text-shadow: 0px 2px 3px #111111;
+    }
+    #text-input-field:focus {
+      outline: none;
     }
 
   </style>
 
-  <form>
-    <label>Submit text to analyze</label>
-    <textarea class="text-box" id=text-input-field placeholder="Your text goes here"></textarea>
+  <form id=text-form>
+    <textarea class="text-box" id=text-input-field placeholder="Enter text to analyze"></textarea>
     <input type="button" value="Submit" id="submit-button">
   </form>
   <div id=submit-text-error-message></div>
@@ -46,7 +70,7 @@ template.innerHTML = `
 
 customElements.define('my-text-form',
   class extends HTMLElement {
-    #submitTextErrorMessage
+    // #submitTextErrorMessage
     #textInputField
 
     constructor () {
@@ -56,7 +80,7 @@ customElements.define('my-text-form',
         .appendChild(template.content.cloneNode(true))
 
       this.#textInputField = this.shadowRoot.querySelector('#text-input-field')
-      this.#submitTextErrorMessage = this.shadowRoot.querySelector('#submit-text-error-message')
+      // this.#submitTextErrorMessage = this.shadowRoot.querySelector('#submit-text-error-message')
 
       this.shadowRoot.querySelector('#submit-button').addEventListener('click', event => {
         event.preventDefault()
@@ -97,13 +121,15 @@ customElements.define('my-text-form',
     #showMessage(text) {
       this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
+      paragraph.setAttribute('id', 'submit-text-error-message')
       paragraph.textContent = text
-      this.#submitTextErrorMessage.appendChild(paragraph)
+      this.shadowRoot.querySelector('#text-form').appendChild(paragraph)
+      // this.#submitTextErrorMessage.appendChild(paragraph)
     }
 
     #removeMessageIfExists() {
-      if (this.#submitTextErrorMessage.firstChild) {
-        this.#submitTextErrorMessage.firstChild.remove()
+      if (this.shadowRoot.querySelector('#submit-text-error-message')) {
+        this.shadowRoot.querySelector('#submit-text-error-message').remove()
       }
     }
   }
