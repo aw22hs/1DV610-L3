@@ -12,15 +12,20 @@ import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
-    
+    form label {
+      font-size: 1.5em;
+    }
+    form p {
+      margin: 1em 0.5em 0em 0em;
+      display: inline-block;
+    }
   </style>
 
   <form id="word-input-form">
     <label>Count specific word (regardless of formatting):</label>
-    <input type="text" id="input-field" placeholder="Your word here">
-    <input type="submit" value="Count" id="submit-button">
+    <input part="text-input-field input" type="text" id="input-field" placeholder="Your word here">
+    <input part="button input" type="submit" value="Count" id="count-word-submit-button">
   </form>
-  <div id=word-count></div>
 `
 customElements.define('my-specific-word-counter',
   class extends HTMLElement {
@@ -34,7 +39,6 @@ customElements.define('my-specific-word-counter',
       this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true))
 
       this.#inputField = this.shadowRoot.querySelector('#input-field')
-      this.#wordCount = this.shadowRoot.querySelector('#word-count')
 
       this.shadowRoot.querySelector('#word-input-form').addEventListener('submit', event => {
         event.preventDefault()
@@ -85,13 +89,14 @@ customElements.define('my-specific-word-counter',
     #displayMessage(text) {
       this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
+      paragraph.setAttribute('id', 'submit-word-count-message')
       paragraph.textContent = text
-      this.#wordCount.appendChild(paragraph)
+      this.shadowRoot.querySelector('#word-input-form').appendChild(paragraph)
     }
 
     #removeMessageIfExists() {
-      if (this.#wordCount.firstChild) {
-        this.#wordCount.firstChild.remove()
+      if (this.shadowRoot.querySelector('#submit-word-count-message')) {
+        this.shadowRoot.querySelector('#submit-word-count-message').remove()
       }
     }
   }

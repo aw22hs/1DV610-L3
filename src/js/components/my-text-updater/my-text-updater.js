@@ -12,15 +12,22 @@ import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
+    form label {
+      font-size: 1.5em;
+    }
+    form p {
+      margin: 1em 0.5em 0em 0em;
+      display: inline-block;
+    }
     
   </style>
 
 <form id="update-text-form">
     <label>Change specific word in the text (only replaces words that has the exact same formatting 
         as the submitted word):</label>
-    <input type="text" id="word-to-replace-input" placeholder="Word to replace">
-    <input type="text" id="new-word-input" placeholder="New word">
-    <input type="submit" value="Update text" id="submit-button">
+    <input part="text-input-field input" type="text" id="word-to-replace-input" placeholder="Word to replace">
+    <input part="text-input-field input" type="text" id="new-word-input" placeholder="New word">
+    <input part="button input" type="submit" value="Update text" id="submit-button">
   </form>
   <div id=text-update-message></div>
 `
@@ -96,8 +103,9 @@ customElements.define('my-text-updater',
     #showMessage(text) {
       this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
+      paragraph.setAttribute('id', 'text-update-message')
       paragraph.textContent = text
-      this.#textUpdateMessage.appendChild(paragraph)
+      this.shadowRoot.querySelector('#update-text-form').appendChild(paragraph)
     }
 
     #resetWords() {
@@ -106,8 +114,8 @@ customElements.define('my-text-updater',
     }
 
     #removeMessageIfExists() {
-      if (this.#textUpdateMessage.firstChild) {
-        this.#textUpdateMessage.firstChild.remove()
+      if (this.shadowRoot.querySelector('#text-update-message')) {
+        this.shadowRoot.querySelector('#text-update-message').remove()
       }
     }
 

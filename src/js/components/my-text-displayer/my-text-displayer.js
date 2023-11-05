@@ -9,21 +9,19 @@ const template = document.createElement('template')
 template.innerHTML = `
   <style>
     #text-displayer {
-      color: black;
+      color: rgb(42, 42, 42);
       white-space: pre-wrap;
+      background-color: rgb(255, 255, 255, 0.8);
     }
-    .text-box {
-      font-size: 1em;
-      height: 400px;
-      width: 90%;
-      vertical-align: top;
-      background-color: white;
+    p {
+      margin: 0;
     }
+
   </style>
 
-  <div class="text-box" id=text-displayer>
+  <div part=text-box id=text-displayer>
   </div>
-  <button id=reset-button>Reset</button>
+  <button part="button" id=reset-button>Reset</button>
 `
 
 customElements.define('my-text-displayer',
