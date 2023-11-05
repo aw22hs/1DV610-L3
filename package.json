@@ -16,6 +16,9 @@
   ],
   "license": "MIT",
   "private": true,
+  "dependencies": {
+    "text-analyzer": "aw22hs/1DV610-L2#main"
+  },
   "devDependencies": {
     "@lnu/eslint-config": "^1.1.10",
     "eslint": "^8.52.0",

@@ -5,9 +5,7 @@
  * @version 1.0.0
  */
 
-// TODO: Importera createAnalyzers från 1DV610-L2 på GitHub
-
-import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
+import { createAnalyzers } from 'text-analyzer'
 
 const template = document.createElement('template')
 template.innerHTML = `
