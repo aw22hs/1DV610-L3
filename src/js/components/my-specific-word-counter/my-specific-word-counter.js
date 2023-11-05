@@ -22,7 +22,6 @@ customElements.define('my-specific-word-counter',
   class extends HTMLElement {
     #inputField
     #wordCounter
-    #wordCount
 
     constructor() {
       super()
