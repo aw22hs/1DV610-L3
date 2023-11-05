@@ -10,6 +10,9 @@ body {
 	background-size: auto;
 	background-repeat: no-repeat;
 	color:rgb(246, 250, 248);
+	margin: auto;
+	height: 100%;
+	padding: 0;
 }
 
 h1 {
