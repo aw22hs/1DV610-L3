@@ -79,7 +79,7 @@ Feel free to contribute, report issues, or suggest improvements to enhance the p
 
 ## License
 
-This project's web components are open-source and released under the [MIT License](../../../../license.md).
+This project's web components are open-source and released under the [MIT License](license.md).
 
 ## Credits
 
