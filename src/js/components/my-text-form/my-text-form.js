@@ -15,12 +15,6 @@ template.innerHTML = `
     form {
       width: 100%;
     }
-    #submit-button {
-      font-size: 1.2em;
-      height: 2.5em;
-      margin-top: 1em;
-    }
-
     form p {
       color: #F2F2F2;
       font-size: 1.2em;
