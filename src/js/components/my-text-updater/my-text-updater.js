@@ -15,8 +15,8 @@ template.innerHTML = `
   </style>
 
 <form id="update-text-form">
-    <label part="label">Change specific word in the text (only replaces words that has the exact same formatting 
-        as the submitted word):</label>
+    <label part="label">Change specific word in the text (only replaces words that has the exact same
+      formatting as the submitted word):</label>
     <input part="text-input-field input" type="text" id="word-to-replace-input" placeholder="Word to replace">
     <input part="text-input-field input" type="text" id="new-word-input" placeholder="New word">
     <input part="button input" type="submit" value="Update text" id="submit-button">
@@ -60,7 +60,8 @@ customElements.define('my-text-updater',
 
     #dispatchUpdateTextEventAndShowMessage() {
       try {
-        const updatedText = this.#updatedTextAnalyzer.replaceWordsWithExactFormatting(this.#wordToReplaceInput.value, this.#newWordInput.value)
+        const updatedText = this.#updatedTextAnalyzer
+          .replaceWordsWithExactFormatting(this.#wordToReplaceInput.value, this.#newWordInput.value)
         this.dispatchEvent(new CustomEvent('updateText', { bubbles: true, detail: { text: updatedText } }))
         const difference = this.#getDifferenceFromOriginalText()
         this.#displayMessage(difference)
