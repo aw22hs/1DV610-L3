@@ -11,6 +11,7 @@ template.innerHTML = `
     #text-displayer {
       color: rgb(42, 42, 42);
       white-space: pre-wrap;
+      overflow: scroll;
       background-color: rgb(255, 255, 255, 0.8);
     }
     p {
