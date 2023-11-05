@@ -12,29 +12,19 @@ import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
-    form label {
-      font-size: 1.5em;
-    }
-    form p {
-      margin: 1em 0.5em 0em 0em;
-      display: inline-block;
-    }
-    
   </style>
 
 <form id="update-text-form">
-    <label>Change specific word in the text (only replaces words that has the exact same formatting 
+    <label part="label">Change specific word in the text (only replaces words that has the exact same formatting 
         as the submitted word):</label>
     <input part="text-input-field input" type="text" id="word-to-replace-input" placeholder="Word to replace">
     <input part="text-input-field input" type="text" id="new-word-input" placeholder="New word">
     <input part="button input" type="submit" value="Update text" id="submit-button">
   </form>
-  <div id=text-update-message></div>
 `
 customElements.define('my-text-updater',
   class extends HTMLElement {
     #newWordInput
-    #textUpdateMessage
     #updatedTextAnalyzer
     #wordToReplaceInput
 
@@ -50,7 +40,6 @@ customElements.define('my-text-updater',
         event.preventDefault()
         this.#dispatchUpdateTextEventAndShowMessage()
       })
-      this.#textUpdateMessage = this.shadowRoot.querySelector('#text-update-message')
     }
 
     static get observedAttributes() {
@@ -74,11 +63,11 @@ customElements.define('my-text-updater',
         const updatedText = this.#updatedTextAnalyzer.replaceWordsWithExactFormatting(this.#wordToReplaceInput.value, this.#newWordInput.value)
         this.dispatchEvent(new CustomEvent('updateText', { bubbles: true, detail: { text: updatedText } }))
         const difference = this.#getDifferenceFromOriginalText()
-        this.#showMessage(difference)
+        this.#displayMessage(difference)
         this.#resetWords()
       } catch (error) {
         const errorMessage = this.#getErrorMessage(error)
-        this.#showMessage(errorMessage)
+        this.#displayMessage(errorMessage)
       }
     }
 
@@ -100,10 +89,11 @@ customElements.define('my-text-updater',
       }
     }
 
-    #showMessage(text) {
+    #displayMessage(text) {
       this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
       paragraph.setAttribute('id', 'text-update-message')
+      paragraph.setAttribute('part', 'message')
       paragraph.textContent = text
       this.shadowRoot.querySelector('#update-text-form').appendChild(paragraph)
     }

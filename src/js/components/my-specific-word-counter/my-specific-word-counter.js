@@ -12,17 +12,10 @@ import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
-    form label {
-      font-size: 1.5em;
-    }
-    form p {
-      margin: 1em 0.5em 0em 0em;
-      display: inline-block;
-    }
   </style>
 
   <form id="word-input-form">
-    <label>Count specific word (regardless of formatting):</label>
+    <label part="label">Count specific word (regardless of formatting):</label>
     <input part="text-input-field input" type="text" id="input-field" placeholder="Your word here">
     <input part="button input" type="submit" value="Count" id="count-word-submit-button">
   </form>
@@ -90,6 +83,7 @@ customElements.define('my-specific-word-counter',
       this.#removeMessageIfExists()
       const paragraph = document.createElement('p')
       paragraph.setAttribute('id', 'submit-word-count-message')
+      paragraph.setAttribute('part', 'message')
       paragraph.textContent = text
       this.shadowRoot.querySelector('#word-input-form').appendChild(paragraph)
     }
