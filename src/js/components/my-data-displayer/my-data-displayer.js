@@ -12,7 +12,10 @@ import { createAnalyzers } from '../../../../../1DV610-L2/src/app.js'
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
-    
+    #display-data p {
+      margin: 0.7em 0.5em;
+      font-size: 1.2em;
+    }
   </style>
 
   <div id=display-data>
