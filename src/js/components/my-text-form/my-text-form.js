@@ -64,7 +64,7 @@ customElements.define('my-text-form',
     }
 
     #isTextInputValid() {
-      // Throws error if the text input is empty
+      // Throws error if the text input is not valid
       createAnalyzers(this.#textInputField.value)
     }
 
