@@ -1,6 +1,6 @@
 # 1DV610-L3
 
-This project consists of a set of custom web components designed to enhance your web applications by providing various text-related functionalities. Each component is reusable and can easily be integrated into your projects to streamline tasks related to text input, analysis, display, and modification. However, the main focus in this project is to provide the application "My Text Analyzer". To read more about "My Text Analyzer", please read the project [wiki](https://github.com/aw22hs/1DV610-L3/wiki).
+This project consists of a set of custom web components designed to enhance your web applications by providing various text-related functionalities. Each component is reusable and can easily be integrated into your projects to streamline tasks related to text input, analysis, display, and modification. However, the main focus in this project is to provide the SPA application "My Text Analyzer". To read more about "My Text Analyzer", please read the project [wiki](https://github.com/aw22hs/1DV610-L3/wiki).
 
 ## Table of Contents
 
